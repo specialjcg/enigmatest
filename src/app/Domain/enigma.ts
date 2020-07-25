@@ -30,7 +30,7 @@ export class EnigmaBuilder {
   private bRotor2: string;
   private bRotor3: string;
   private bmessage: string;
-  private bmessageEncode :string;
+  private bmessageEncode: string;
 
   build(): Enigma {
     return new Enigma(this);
