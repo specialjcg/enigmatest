@@ -1,20 +1,62 @@
 export class Enigma {
+
+
   model: string;
-  shift: number;
+  startingShift: number;
   rotor1: string;
   rotor2: string;
   rotor3: string;
   message: string;
-  messageEncode: string;
+
 
   constructor(enigmaBuilder: EnigmaBuilder) {
     this.model = enigmaBuilder.model;
     this.message = enigmaBuilder.message;
-    this.shift = enigmaBuilder.shift;
+    this.startingShift = enigmaBuilder.shift;
     this.rotor1 = enigmaBuilder.rotor1;
     this.rotor2 = enigmaBuilder.rotor2;
     this.rotor3 = enigmaBuilder.rotor3;
-    this.messageEncode = enigmaBuilder.messagEncode;
+
+  }
+
+  get messageCode(): string {
+    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let codeMessage = '';
+    if (this.model === 'ENCODE') {
+      for (let inccaesar = 0; inccaesar < this.message.length; inccaesar++) {
+        const codeindexrotor1 = (alphabet.indexOf(this.message.charAt(inccaesar)) + this.startingShift + inccaesar) % 26;
+
+
+        const codeindexrotor2 = alphabet.indexOf(this.rotor1.charAt(codeindexrotor1));
+
+        const codeindexrotor3 = alphabet.indexOf(this.rotor2.charAt(codeindexrotor2));
+
+        codeMessage = codeMessage.concat(this.rotor3.charAt(codeindexrotor3));
+
+      }
+
+      return codeMessage;
+    } else {
+      for (let inccaesar = 0; inccaesar < this.message.length; inccaesar++) {
+        const codeindexrotor1 = this.rotor3.indexOf(this.message.charAt(inccaesar));
+
+
+        const codeindexrotor2 = this.rotor2.indexOf(alphabet.charAt(codeindexrotor1));
+
+        const codeindexrotor3 = this.rotor1.indexOf(alphabet.charAt(codeindexrotor2));
+        let codeindexalphabet = (alphabet.indexOf(alphabet.charAt(codeindexrotor3)) - this.startingShift - inccaesar) % 26;
+        if (codeindexalphabet < 0) {
+          codeindexalphabet += 26;
+        }
+
+
+        codeMessage = codeMessage.concat(alphabet.charAt(codeindexalphabet));
+
+      }
+
+      return codeMessage;
+    }
+
   }
 
   static builder(): EnigmaBuilder {
@@ -30,7 +72,7 @@ export class EnigmaBuilder {
   private bRotor2: string;
   private bRotor3: string;
   private bmessage: string;
-  private bmessageEncode: string;
+
 
   build(): Enigma {
     return new Enigma(this);
@@ -40,10 +82,6 @@ export class EnigmaBuilder {
     return this.bmodel;
   }
 
-  get messagEncode(): string {
-
-    return this.bmessageEncode;
-  }
 
   get shift(): number {
     return this.bshift;
