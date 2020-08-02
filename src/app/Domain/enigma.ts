@@ -24,7 +24,7 @@ export class Enigma {
     let codeMessage = '';
     if (this.model === 'ENCODE') {
       for (let inccaesar = 0; inccaesar < this.message.length; inccaesar++) {
-        const codeindexrotor1 = (alphabet.indexOf(this.message.charAt(inccaesar)) + this.startingShift + inccaesar) % 26;
+        const codeindexrotor1 = (alphabet.indexOf(this.message.charAt(inccaesar)) + this.startingShift + inccaesar) % alphabet.length;
 
 
         const codeindexrotor2 = alphabet.indexOf(this.rotor1.charAt(codeindexrotor1));
@@ -44,9 +44,9 @@ export class Enigma {
         const codeindexrotor2 = this.rotor2.indexOf(alphabet.charAt(codeindexrotor1));
 
         const codeindexrotor3 = this.rotor1.indexOf(alphabet.charAt(codeindexrotor2));
-        let codeindexalphabet = (alphabet.indexOf(alphabet.charAt(codeindexrotor3)) - this.startingShift - inccaesar) % 26;
+        let codeindexalphabet = (alphabet.indexOf(alphabet.charAt(codeindexrotor3)) - this.startingShift - inccaesar) % alphabet.length;
         if (codeindexalphabet < 0) {
-          codeindexalphabet += 26;
+          codeindexalphabet += alphabet.length;
         }
 
 
